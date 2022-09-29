@@ -87,6 +87,13 @@ impl FromStr for Address {
     type Err = Error;
 
     fn from_str(addr: &str) -> Result<Self, Error> {
+        if addr.starts_with("unix://@") {
+            // unix abstract socket address
+            return Ok(Self::Unix {
+                path: addr.trim_start_matches("unix://").to_owned(),
+            });
+        }
+
         let prefixed_addr = if addr.contains("://") {
             addr.to_owned()
         } else {
