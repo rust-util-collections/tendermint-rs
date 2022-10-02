@@ -90,7 +90,7 @@ impl FromStr for Address {
         if addr.starts_with("unix://@") {
             // unix abstract socket address
             return Ok(Self::Unix {
-                path: addr.trim_start_matches("unix://").to_owned(),
+                path: addr.strip_prefix("unix://").unwrap().to_owned(),
             });
         }
 
